@@ -14,9 +14,9 @@ print(new)
 
 '''a = input('Enter: ')
 new = ''
-for i in a:
-    if i != '2':
-        new += i
+for j in a:
+    if j != '2':
+        new += j
 print(new)'''
 '''str1 = input('Enter string: ')
 answ = 0

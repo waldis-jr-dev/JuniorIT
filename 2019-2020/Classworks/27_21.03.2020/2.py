@@ -4,12 +4,12 @@ for i in range(10):
 print(a)
 '''keys = []
 values = []
-for i in a.keys():
-    keys.append(i)
-    values.append(a[i])
+for j in a.keys():
+    keys.append(j)
+    values.append(a[j])
 b = {}
-for i in range(len(keys)):
-    b[values[i]] = keys[i]
+for j in range(len(keys)):
+    b[values[j]] = keys[j]
 print(b)'''
 for i in list(a.keys()):
     a[a[i]] = i

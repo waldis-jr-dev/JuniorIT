@@ -29,7 +29,7 @@ for j in range(i+1, len(a)):
                 answ /= float(a[sign_place+1:j])
             else:
                 answ /= 1
-                print('Ty zatupil i delil na nol')
+                print('Ty zatupil j delil na nol')
             sign_place = j
 
 print(answ)

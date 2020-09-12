@@ -1,4 +1,4 @@
-from Private.DB import db_config
+from Private.MySQL import db_config
 
 up_1 = int(input('Entyer up_1: '))
 down_1 = int(input('Entyer down_1: '))
