@@ -14,7 +14,7 @@ def fibo(number: int = 0) -> int:
 def recursive_fibo(number: int = 0) -> int:
     if number in (0, 1):
         return 1
-    return (recursive_fibo())
+    return recursive_fibo(number - 1) + recursive_fibo(number)
 
 
 print(fibo(8))
