@@ -25,8 +25,6 @@ def lines() -> Generator[Optional[str], Optional[str], None]:
                 active_files[name] = number_of_line
                 name = resp
                 break
-            else:
-                continue
 
 
 if __name__ == '__main__':
