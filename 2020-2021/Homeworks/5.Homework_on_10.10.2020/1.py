@@ -1,5 +1,4 @@
 import os
-from collections import Counter
 
 
 class FileMaker:
@@ -15,9 +14,8 @@ class FileMaker:
 
     def unique_symbols(self):
         with open(self.name, 'r') as file:
-            symbols = [symbol for line in file.readlines() for symbol in line]
-        counted_symbols = Counter(symbols)
-        return len([symbol for symbol in counted_symbols.keys() if counted_symbols[symbol] == 1])
+            file.seek(0)
+            return len(set(file.read()))
 
     def end_append(self, symbols):
         with open(self.name, 'a') as file:
@@ -25,9 +23,10 @@ class FileMaker:
 
     def start_append(self, symbols):
         with open(self.name, 'r') as file:
-            lines = file.readlines()
+             lines = file.readlines()
         with open(self.name, 'w') as file:
             file.write(symbols + ''.join(lines))
 
 
 test = FileMaker('test.txt')
+print(test.unique_symbols())
