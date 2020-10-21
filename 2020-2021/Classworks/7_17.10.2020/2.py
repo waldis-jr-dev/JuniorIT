@@ -1,32 +1,15 @@
-class A:
-    def __init__(self):
-        super().__init__()
-        print('A')
+class FirstName:
+    def __init__(self, name):
+        self.name = name
+        print(FirstName.__dict__)
 
 
-class B(A):
-    def __init__(self):
-        super().__init__()
-        print('B')
+class LastName(FirstName):
+    def __init__(self, name, surname):
+        super().__init__(name)
+        self.surname = surname
+        print(LastName.__dict__)
 
 
-class C(A):
-    def __init__(self):
-        super().__init__()
-        print('C')
-
-
-class D(B, C):
-    def __init__(self):
-        super().__init__()
-        print('D')
-
-
-class E(C, B):
-    def __init__(self):
-        super().__init__()
-        print('E')
-
-
-class F(D, E):
-    pass
+first = FirstName('Jon')
+second = LastName('Jon', 'Conor')
