@@ -33,9 +33,9 @@ class Student(Human):
             for _ in range(lines):
                 line = ''
                 for _ in range(characters):
-                    line += random.choice(string.ascii_letters)
+                    line += random.choice(string.ascii_letters + string.digits + string.punctuation)
                 file.write(line + '\n')
-            file.write(f'Date of birth: {self.date_of_birth}\n'
+            file.write(f'\nDate of birth: {self.date_of_birth}\n'
                        f'Course: {self.course}\n'
                        f'Specialization: {self.specialization}')
 
