@@ -19,7 +19,7 @@ class Rectangle:
     def area(self):
         return abs(self.dot1.x - self.dot2.x) * abs(self.dot1.y - self.dot2.y)
 
-    def perimeter(self):
+    def perimeter(self) -> Union[int, float]:
         per = abs(self.dot1.x - self.dot2.x) + abs(self.dot1.y - self.dot2.y)
         return per * 2 if self.area() != 0 else per
 
