@@ -2,13 +2,17 @@ class Person:
     def __init__(self):
         self.name = None
         self.birth_year = None
+        self.id = None
 
-    def insert_data(self, name, birth_year, *args, **kwargs):
+    def insert_data(self, id, name, birth_year, *args, **kwargs):
+        self.id = id
         self.name = name
         self.birth_year = birth_year
 
     def __repr__(self):
-        return f"Name: {self.name}\nYear of birth: {self.birth_year}"
+        return f"Name: {self.name}" \
+               f"Year of birth: {self.birth_year}" \
+               f"ID: {self.id}"
 
 
 class Passenger(Person):
@@ -23,8 +27,8 @@ class Passenger(Person):
                f"End location: {self.end_location}\n" \
                f"Distance: {self.distance}"
 
-    def insert_data(self, name, birth_year, *args, **kwargs):
-        super().insert_data(name, birth_year, *args, **kwargs)
+    def insert_data(self, id, name, birth_year, *args, **kwargs):
+        super().insert_data(id, name, birth_year, *args, **kwargs)
         self.start_location = kwargs.get('start_location')
         self.end_location = kwargs.get('end_location')
         self.distance = kwargs.get('distance')
