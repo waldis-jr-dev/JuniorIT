@@ -14,8 +14,7 @@ class Customer:
             return 'No customer with this ID !'
         else:
             data = data[0]
-        customer = Passenger
-        print(customer)
+        customer = Passenger()
         customer.insert_data(id=data[0],
                              name=data[1],
                              birth_year= data[2],
@@ -26,7 +25,7 @@ class Customer:
 
     @staticmethod
     def insert_cost(customer: Passenger):
-        sql = '''INSERT INTO customers (customer_id, cost) VALUES (?,?)'''
+        sql = '''INSERT INTO cost (customer_id, cost) VALUES (?,?)'''
         val = (customer.id, customer.price_for_km())
         cursor.execute(sql, val)
         conn.commit()
@@ -36,7 +35,7 @@ if __name__ == '__main__':
     test = Customer()
 
     customer1 = test.find_customer(2)
-    print(cust)
+    print(customer1)
     test.insert_cost(customer1)
 
 cursor.close()

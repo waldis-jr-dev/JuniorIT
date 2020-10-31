@@ -23,7 +23,10 @@ class Passenger(Person):
         self.distance = None
 
     def __repr__(self):
-        return f"Start location: {self.start_location}\n"\
+        return f"Name: {self.name}\n" \
+               f"Year of birth: {self.birth_year}\n" \
+               f"ID: {self.id}\n"\
+               f"Start location: {self.start_location}\n"\
                f"End location: {self.end_location}\n" \
                f"Distance: {self.distance}"
 
