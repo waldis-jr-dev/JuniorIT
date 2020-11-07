@@ -28,7 +28,7 @@ class Customer:
     @classmethod
     def insert_cost(cls, customer: Passenger):
         sql = '''INSERT INTO cost (customer_id, cost) VALUES (?,?)'''
-        val = (customer.id, customer.price_for_km())
+        val = (customer.id, customer.ride_cost())
         cursor.execute(sql, val)
         conn.commit()
 
