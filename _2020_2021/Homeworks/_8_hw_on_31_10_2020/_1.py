@@ -10,7 +10,7 @@ cursor.executescript('''PRAGMA foreign_keys = ON''')
 class Customer:
     @classmethod
     def find_customer(cls, u_id: int) -> Union[str, Passenger]:
-        sql = '''SELECT id, name, birth_year, start_location, end_location, distance FROM customers WHERE id LIKE ?'''
+        sql = '''SELECT note_id, name, birth_year, start_location, end_location, distance FROM customers WHERE note_id LIKE ?'''
         data = cursor.execute(sql, (u_id,)).fetchall()
         if len(data) == 0:
             return 'No customer with this ID !'
