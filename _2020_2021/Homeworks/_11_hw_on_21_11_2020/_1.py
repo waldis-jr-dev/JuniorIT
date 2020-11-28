@@ -14,6 +14,10 @@ class AbstractBooks(ABC):
         pass
 
     @abstractmethod
+    def book_info(self):
+        pass
+
+    @abstractmethod
     def book_content(self):
         pass
 
@@ -28,6 +32,10 @@ class AbstractNotes(ABC):
         pass
 
     @abstractmethod
+    def note_info(self):
+        pass
+
+    @abstractmethod
     def note_content(self):
         pass
 
@@ -37,12 +45,13 @@ class AbstractNotes(ABC):
     
 
 class AbstractTasks(ABC):
+
     @abstractmethod
     def delete_task(self):
         pass
 
     @abstractmethod
-    def task_content(self):
+    def task_info(self):
         pass
 
     @abstractmethod
@@ -104,8 +113,8 @@ class Notes(AbstractNotes):
             self.note_id = note_id
 
     @classmethod
-    def get_note_by_id(cls, book_id):
-        return Notes(book_id=book_id, create_new=False)
+    def get_note_by_id(cls, note_id):
+        return Notes(note_id=note_id, create_new=False)
 
     def note_info(self):
         sql = '''SELECT note_id, book_id, note_name, note_creation_time FROM notes WHERE note_id LIKE ?'''
@@ -117,8 +126,11 @@ class Notes(AbstractNotes):
         conn.commit()
 
     def note_content(self):
-        sql = '''SELECT task_id, note_id, task_name, task_creation_time, status FROM tasks WHERE note_id LIKE ?'''
-        return cursor.execute(sql, (self.note_id,)).fetchall()
+        sql = '''SELECT task_id FROM tasks WHERE note_id LIKE ?'''
+        tasks = []
+        for task in cursor.execute(sql, (self.note_id,)).fetchall()
+            tasks.append(Tasks())
+        return tasks
 
     def change_note_name(self, new_name):
         sql = '''UPDATE notes SET note_name = ? WHERE note_id LIKE ?'''
@@ -126,22 +138,29 @@ class Notes(AbstractNotes):
         conn.commit()
 
     def create_task(self, task_name):
-        return Tasks(task_name, self.note_id)
+        return Tasks(task_name=task_name, note_id=self.note_id)
 
 
 class Tasks(AbstractTasks):
-    def __init__(self, task_name, note_id):
-        sql = '''INSERT INTO tasks (note_id, task_name, task_creation_time) VALUES (?,?,?)'''
-        cursor.execute(sql, (note_id, task_name, time.time()))
-        conn.commit()
-        self.task_id = cursor.lastrowid
+    def __init__(self, task_name=None, note_id=None, task_id=None, create_new=True):
+        if create_new:
+            sql = '''INSERT INTO tasks (note_id, task_name, task_creation_time) VALUES (?,?,?)'''
+            cursor.execute(sql, (note_id, task_name, time.time()))
+            conn.commit()
+            self.task_id = cursor.lastrowid
+        if not create_new:
+            self.task_id = task_id
+
+    @classmethod
+    def get_task_by_id(cls, book_id):
+        return Tasks(task_id=book_id, create_new=False)
 
     def delete_task(self):
-        sql = '''DELETE FROM tasks WHERE note_id LIKE ?'''
+        sql = '''DELETE FROM tasks WHERE task_id LIKE ?'''
         cursor.execute(sql, (self.tasks_id,))
         conn.commit()
 
-    def task_content(self):
+    def task_info(self):
         sql = '''SELECT task_id, note_id, task_name, task_creation_time, status FROM tasks WHERE task_id LIKE ?'''
         return cursor.execute(sql, (self.task_id,)).fetchall()
 
