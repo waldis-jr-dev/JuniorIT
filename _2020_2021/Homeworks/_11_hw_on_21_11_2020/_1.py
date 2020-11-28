@@ -71,7 +71,11 @@ class Books(AbstractBooks):
             conn.commit()
             self.book_id = cursor.lastrowid
         if not create_new:
-            self.book_id = book_id
+            sql = '''SELECT book_id FROM books WHERE book_id LIKE ?'''
+            if len(cursor.execute(sql, (book_id,)).fetchall()) != 0:
+                self.book_id = book_id
+            else:
+                raise KeyError('Book ID not found in DB')
 
     @classmethod
     def get_book_by_id(cls, book_id):
@@ -111,7 +115,11 @@ class Notes(AbstractNotes):
             conn.commit()
             self.note_id = cursor.lastrowid
         if not create_new:
-            self.note_id = note_id
+            sql = '''SELECT note_id FROM notes WHERE note_id LIKE ?'''
+            if len(cursor.execute(sql, (note_id,)).fetchall()) != 0:
+                self.note_id = note_id
+            else:
+                raise KeyError('Note ID not found in DB')
 
     @classmethod
     def get_note_by_id(cls, note_id):
@@ -130,7 +138,7 @@ class Notes(AbstractNotes):
     def note_content(self):
         sql = '''SELECT task_id FROM tasks WHERE note_id LIKE ?'''
         tasks = []
-        for task in cursor.execute(sql, (self.note_id,)).fetchall()
+        for task in cursor.execute(sql, (self.note_id,)).fetchall():
             tasks.append(Tasks(task_id=task[0], create_new=False))
         return tasks
 
@@ -151,7 +159,11 @@ class Tasks(AbstractTasks):
             conn.commit()
             self.task_id = cursor.lastrowid
         if not create_new:
-            self.task_id = task_id
+            sql = '''SELECT task_id FROM tasks WHERE book_id LIKE ?'''
+            if len(cursor.execute(sql, (task_id,)).fetchall()) != 0:
+                self.task_id = task_id
+            else:
+                raise KeyError('Task ID not found in DB')
 
     @classmethod
     def get_task_by_id(cls, book_id):
@@ -179,10 +191,17 @@ class Tasks(AbstractTasks):
 
 
 if __name__ == '__main__':
-    first_book = Books.get_book_by_id(1)
-    print(first_book.book_info())
-    print(first_book.book_content())
+    # homework_id = Books('Homework').book_id
+    # math_id = Notes('Math', homework_id).note_id
+    # ukr_id = Notes('Ukr', homework_id).note_id
+    # Tasks('28.11.2020', math_id)
+    # Tasks('21.11.2020', math_id)
+    # Tasks('poem', ukr_id)
 
+    book_2 = Books.get_book_by_id(2)
+    print(book_2.book_info())
+    for note in book_2.book_content():
+        print(note.note_info())
 
 cursor.close()
 conn.close()
