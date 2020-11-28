@@ -85,6 +85,7 @@ class Books(AbstractBooks):
         sql = '''DELETE FROM books WHERE book_id LIKE ?'''
         cursor.execute(sql, (self.book_id,))
         conn.commit()
+        self.book_id = None
 
     def book_content(self):
         sql = '''SELECT note_id FROM notes WHERE book_id LIKE ?'''
@@ -124,6 +125,7 @@ class Notes(AbstractNotes):
         sql = '''DELETE FROM notes WHERE note_id LIKE ?'''
         cursor.execute(sql, (self.note_id,))
         conn.commit()
+        self.note_id = None
 
     def note_content(self):
         sql = '''SELECT task_id FROM tasks WHERE note_id LIKE ?'''
@@ -159,6 +161,7 @@ class Tasks(AbstractTasks):
         sql = '''DELETE FROM tasks WHERE task_id LIKE ?'''
         cursor.execute(sql, (self.tasks_id,))
         conn.commit()
+        self.task_id = None
 
     def task_info(self):
         sql = '''SELECT task_id, note_id, task_name, task_creation_time, status FROM tasks WHERE task_id LIKE ?'''
