@@ -131,7 +131,7 @@ class Notes(AbstractNotes):
         sql = '''SELECT task_id FROM tasks WHERE note_id LIKE ?'''
         tasks = []
         for task in cursor.execute(sql, (self.note_id,)).fetchall()
-            tasks.append(Tasks())
+            tasks.append(Tasks(task_id=task[0], create_new=False))
         return tasks
 
     def change_note_name(self, new_name):
