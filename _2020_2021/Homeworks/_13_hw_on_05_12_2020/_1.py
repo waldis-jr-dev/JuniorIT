@@ -75,7 +75,7 @@ class Fighter(AbstractFighter):
             self.__name = name
             self.__damage = damage
             self.__hp = hp
-            self.__MAX_HP = hp 
+            self.__MAX_HP = hp
             self.__strength = strength
             self.__agility = agility
             self.__wins = 0
@@ -83,17 +83,9 @@ class Fighter(AbstractFighter):
         if not create_new:
             sql = '''SELECT name, damage, hp, MAX_HP, strength, agility, wins, losses 
                      FROM fighters WHERE fighter_id = ?'''
-            fighter = cursor.execute(sql, (fighter_id,)).fetchall()[0]
-            conn.commit()
             self.__fighter_id = fighter_id
-            self.__name = fighter[0]
-            self.__damage = fighter[1]
-            self.__hp = fighter[2]
-            self.__MAX_HP = fighter[3]
-            self.__strength = fighter[4]
-            self.__agility = fighter[5]
-            self.__wins = fighter[6]
-            self.__losses = fighter[7]
+            self.__name, self.__damage, self.__hp, self.__MAX_HP, self.__strength, \
+            self.__agility, self.__wins, self.__losses = cursor.execute(sql, (fighter_id,)).fetchall()[0]
 
     def get_fighter_id(self) -> int:
         return self.__fighter_id
@@ -126,26 +118,24 @@ class Fighter(AbstractFighter):
 
     def heal(self, new_hp: Union[int, float]):
         self.__hp = self.__MAX_HP if self.__hp + new_hp > self.__MAX_HP else self.__hp + new_hp
-        sql = '''UPDATE fighters SET hp = ? WHERE fighter_id = ?'''
-        cursor.execute(sql, (self.__hp, self.__fighter_id))
-        conn.commit()
+        self.fighter_log('hp', self.__hp, self.__fighter_id)
 
     def deal_damage(self, minus_hp: Union[int, float]):
         self.__hp = 0 if self.__hp - minus_hp < 0 else self.__hp - minus_hp
-        sql = '''UPDATE fighters SET hp = ? WHERE fighter_id = ?'''
-        cursor.execute(sql, (self.__hp, self.__fighter_id))
-        conn.commit()
+        self.fighter_log('hp', self.__hp, self.__fighter_id)
 
     def add_win(self):
         self.__wins += 1
-        sql = '''UPDATE fighters SET wins = ? WHERE fighter_id = ?'''
-        cursor.execute(sql, (self.__wins, self.__fighter_id))
-        conn.commit()
+        self.fighter_log('wins', self.__wins, self.__fighter_id)
 
     def add_loss(self):
         self.__losses += 1
-        sql = '''UPDATE fighters SET losses = ? WHERE fighter_id = ?'''
-        cursor.execute(sql, (self.__losses, self.__fighter_id))
+        self.fighter_log('losses', self.__losses, self.__fighter_id)
+
+    @staticmethod
+    def fighter_log(column: str, new_data: Union[int, float], fighter_id: int):
+        sql = f'''UPDATE fighters SET {column} = ? WHERE fighter_id = ?'''
+        cursor.execute(sql, (new_data, fighter_id))
         conn.commit()
 
 
@@ -161,11 +151,11 @@ def battle(fighter1: Fighter, fighter2: Fighter) -> Generator[str, None, None]:
     while fighter1.get_hp() != 0 and fighter2.get_hp() != 0:
         if fighters[ch].attack(fighters[(ch + 1) % 2]):
             yield f'{fighters[ch].get_name()} makes {fighters[ch].get_damage()} ' \
-                  f'damage to {fighters[(ch+1)%2].get_name()}'
+                  f'damage to {fighters[(ch + 1) % 2].get_name()}\n' \
+                  f'{fighter1.get_name()} hp: {fighter1.get_hp()}; ' \
+                  f'{fighter2.get_name()} hp: {fighter2.get_hp()}\n'
         else:
             yield f'{fighters[ch].get_name()} attack missed'
-        yield f'{fighter1.get_name()} hp: {fighter1.get_hp()}; ' \
-              f'{fighter2.get_name()} hp: {fighter2.get_hp()}'
         ch += 1
         ch %= 2
     if fighter1.get_hp() == 0:
@@ -191,7 +181,8 @@ if __name__ == '__main__':
     # test_fighter2 = Fighter('Angel', 25, 95, 25, 20)
     test_fighter1 = Fighter(create_new=False, fighter_id=1)
     test_fighter2 = Fighter(create_new=False, fighter_id=2)
-    # test_fighter1.heal(85)
+    test_fighter2.heal(100)
+    test_fighter1.heal(100)
     for act in battle(test_fighter1, test_fighter2):
         print(act)
 
