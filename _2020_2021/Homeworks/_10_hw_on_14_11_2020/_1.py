@@ -1,4 +1,4 @@
-from _2020_2021.Homeworks._9_hw_on_7_11_2020.abstract_crawler import AbstractEngine, AbstractCrawler, AbstractParser
+from _2020_2021.Homeworks._9_hw_on_07_11_2020.abstract_crawler import AbstractEngine, AbstractCrawler, AbstractParser
 from typing import Type, Dict, Optional
 import requests
 
